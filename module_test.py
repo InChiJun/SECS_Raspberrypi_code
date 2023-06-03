@@ -1,8 +1,8 @@
 import time
 
 from Set.gpioset import MySet
-from IoT_Space import sensor
-from AIoT_Space import sensor
+from IoT_Space.sensor import IotSpace
+from AIoT_Space.sensor import AiotSpace
 
 
 class Controller:
@@ -13,8 +13,8 @@ class Controller:
     def run(self):
         while True:
             try:
-                sensor.IotSpace.run()
-                sensor.AiotSpace.run()
+                IotSpace.run()
+                AiotSpace.run()
                 time.sleep(3)
 
             except RuntimeError as e:
