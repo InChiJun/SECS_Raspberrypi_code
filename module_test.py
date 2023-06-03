@@ -1,4 +1,5 @@
 import time
+import RPi.GPIO as GPIO
 
 from Set.gpioset import MySet
 from IoT_Space.sensor import IotSpace
@@ -13,8 +14,8 @@ class Controller:
     def run(self):
         while True:
             try:
-                IotSpace.run()
-                AiotSpace.run()
+                IotSpace.run(self)
+                AiotSpace.run(self)
                 time.sleep(3)
 
             except RuntimeError as e:
@@ -25,4 +26,4 @@ if __name__ == "__main__":
     try:
         controller.run()
     except KeyboardInterrupt:
-        MySet.cleanup()
+        GPIO.cleanup()

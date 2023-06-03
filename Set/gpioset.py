@@ -20,6 +20,3 @@ class MySet:
         GPIO.setup(iot_dht_fan, GPIO.OUT)
         GPIO.setup(aiot_ir_fan, GPIO.OUT)
         GPIO.setup(aiot_dht_fan, GPIO.OUT)
-
-    def cleanup(self):
-        GPIO.cleanup()

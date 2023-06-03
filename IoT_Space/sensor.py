@@ -11,10 +11,10 @@ class IotSpace:
         iot_ir_state = GPIO.input(gpioset.iot_ir)
 
         if iot_ir_state == 0:
-            print(Time.nowtime(), "-- Signal detected!")
+            print(Time.nowtime(self), "-- Signal detected!")
             GPIO.output(gpioset.iot_ir_fan, GPIO.LOW)
         elif iot_ir_state == 1:
-            print(Time.nowtime(), "-- Signal not detected!")
+            print(Time.nowtime(self), "-- Signal not detected!")
             GPIO.output(gpioset.iot_ir_fan, GPIO.HIGH)
 
         print("Temp1={0:0.1f}*C Humidity1={1:0.1f}%".format(temp1, hum1))
