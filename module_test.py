@@ -1,6 +1,6 @@
 import time
 
-from GPIO.gpio import Gpio
+from GPIO.gpioset import GpioSet
 from IoT_Space import sensor
 from AIoT_Space import sensor
 
@@ -13,11 +13,10 @@ aiot_dht = 25
 aiot_ir_fan = 4
 aiot_dht_fan = 17
 
-
 class Controller:
     def __init__(self):
-        Gpio.setmode()
-        Gpio.setup()
+        GpioSet.setmode()
+        GpioSet.setup()
 
     def run(self):
         while True:
@@ -29,10 +28,9 @@ class Controller:
             except RuntimeError as e:
                 print("Reading from Sensor failure: ", e.args)
 
-
 if __name__ == "__main__":
     controller = Controller()
     try:
         controller.run()
     except KeyboardInterrupt:
-        Gpio.cleanup()
+        GpioSet.cleanup()
