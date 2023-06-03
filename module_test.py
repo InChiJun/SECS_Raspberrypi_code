@@ -7,8 +7,8 @@ from AIoT_Space.sensor import AiotSpace
 
 class Controller:
     def __init__(self):
-        MySet.setmode()
-        MySet.setup()
+        MySet.setmode(self)
+        MySet.setup(self)
 
     def run(self):
         while True:
