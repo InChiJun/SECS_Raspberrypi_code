@@ -1,6 +1,6 @@
 import time
 
-from GPIO.gpioset import GpioSet
+from Set.gpioset import MySet
 from IoT_Space import sensor
 from AIoT_Space import sensor
 
@@ -15,8 +15,8 @@ aiot_dht_fan = 17
 
 class Controller:
     def __init__(self):
-        GpioSet.setmode()
-        GpioSet.setup()
+        MySet.setmode()
+        MySet.setup()
 
     def run(self):
         while True:
@@ -33,4 +33,4 @@ if __name__ == "__main__":
     try:
         controller.run()
     except KeyboardInterrupt:
-        GpioSet.cleanup()
+        MySet.cleanup()

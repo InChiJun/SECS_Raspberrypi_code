@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import module_test
 
-class GpioSet:
+class MySet:
     def setmode(self):
         GPIO.setmode(GPIO.BCM)
 
