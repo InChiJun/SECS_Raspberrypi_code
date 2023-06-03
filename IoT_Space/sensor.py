@@ -3,6 +3,9 @@ import Adafruit_DHT as dht
 
 from Set import gpioset
 from Time.now import Time
+from db_sensor import Database
+
+db = Database()
 
 class IotSpace:
 
