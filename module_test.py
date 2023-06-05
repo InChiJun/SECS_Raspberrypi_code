@@ -2,7 +2,7 @@ import time
 import RPi.GPIO as GPIO
 
 from Set.gpioset import MySet
-from IoT_Space.sensor import IotSpace
+from IoT_Space.sensor import IoTSpace
 from AIoT_Space.sensor import AIotSpace
 
 
@@ -14,7 +14,7 @@ class Controller:
     def run(self):
         while True:
             try:
-                IotSpace.run(self)
+                IoTSpace.run(self)
                 AIotSpace.run(self)
                 time.sleep(3)
 
