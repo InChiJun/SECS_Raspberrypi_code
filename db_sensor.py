@@ -1,8 +1,14 @@
 import pymysql
+import my_db
 
 class Database():
     def __init__(self):
-        self.db = pymysql.connect(host='localhost', port=3306, user='root',password=my_db.password, db='sensor_data', charset='utf8')
+        self.db = pymysql.connect(host=my_db.host,
+                                  port=3306,
+                                  user='root',
+                                  password=my_db.password,
+                                  db='sensor_data',
+                                  charset='utf8')
         self.cursor = self.db.cursor()
 
     # 온습도 센서의 상태 Insert
