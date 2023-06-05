@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 
 from Set.gpioset import MySet
 from IoT_Space.sensor import IotSpace
-from AIoT_Space.sensor import AiotSpace
+from AIoT_Space.sensor import AIotSpace
 
 
 class Controller:
@@ -15,7 +15,7 @@ class Controller:
         while True:
             try:
                 IotSpace.run(self)
-                AiotSpace.run(self)
+                AIotSpace.run(self)
                 time.sleep(3)
 
             except RuntimeError as e:
