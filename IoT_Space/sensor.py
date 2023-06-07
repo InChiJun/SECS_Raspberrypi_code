@@ -11,6 +11,9 @@ db = Database()
 
 class IoTSpace:
     num = 1
+    def addNumber(self):
+        IoTSpace.num += 1
+        return IoTSpace.num
 
     def run(self):
         fan_status = 0
@@ -26,7 +29,7 @@ class IoTSpace:
         iot_ir_state = GPIO.input(gpioset.iot_ir)
 
         if iot_ir_state == 0:
-            IoTSpace.num += 1
+            IoTSpace.addNumber(self)
             bulb_status = 1
             bulb_current_status = bulb_status
             bulb_start_time = timestamp
@@ -35,10 +38,10 @@ class IoTSpace:
             print(timestamp, "-- Signal detected!")
             GPIO.output(gpioset.iot_ir_fan, GPIO.LOW)
         elif iot_ir_state == 1:
-            IoTSpace.num += 1
+            IoTSpace.addNumber(self)
             bulb_status = 0
             if bulb_status != bulb_current_status:
-                IoTSpace.num += 1
+                IoTSpace.addNumber(self)
                 bulb_stop_time = datetime.now()
                 bulb_runtime = bulb_stop_time - bulb_start_time
                 db.iotBulbInsert(IoTSpace.num, information.bulb1, bulb_runtime)
@@ -51,7 +54,7 @@ class IoTSpace:
         print("Temp1={0:0.1f}*C Humidity1={1:0.1f}%".format(temperature, humidity))
 
         if temperature > 30.0:
-            IoTSpace.num += 1
+            IoTSpace.addNumber(self)
             fan_status = 1
             fan_current_status = fan_status
             fan_start_time = timestamp
@@ -60,10 +63,10 @@ class IoTSpace:
             print("온도가 높으므로 쿨링팬을 작동합니다.")
             GPIO.output(gpioset.iot_dht_fan, GPIO.LOW)
         elif temperature <= 30.0:
-            IoTSpace.num += 1
+            IoTSpace.addNumber(self)
             fan_status = 0
             if fan_status != fan_current_status:
-                IoTSpace.num += 1
+                IoTSpace.addNumber(self)
                 fan_stop_time = datetime.now()
                 fan_runtime = fan_stop_time - fan_start_time
                 db.iotFanInsert(IoTSpace.num, information.fan1, fan_runtime)
