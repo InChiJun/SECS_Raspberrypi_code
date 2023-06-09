@@ -1,7 +1,7 @@
 import time
 import RPi.GPIO as GPIO
 
-from Set.gpioset import MySet
+from Set.set_gpio import MySet
 from IoT_Space.sensor import IoTSpace
 from AIoT_Space.sensor import AIotSpace
 
