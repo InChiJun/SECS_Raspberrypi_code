@@ -12,24 +12,32 @@ def add_number():
     IoTSpace.num += 1
     return IoTSpace.num
 
+class DeviceStatus:
+    def __init__(self, initial_status):
+        self.current_status = initial_status
+
+    def update_status(self, new_status):
+        if new_status != self.current_status:
+            self.current_status = new_status
+
+    def get_current_status(self):
+        return self.current_status
+
 class IoTSpace:
     num = 1
 
+    def __init__(self):
+        self.fan_status = DeviceStatus(0)
+        self.bulb_status = DeviceStatus(0)
+
     def run(self):
-        fan_status = 0
-        fan_current_status = fan_status
-
-        bulb_status = 0
-        bulb_current_status = bulb_status
-
         timestamp = Time.nowtime(self)
         humidity, temperature = dht.read_retry(dht.DHT22, set_gpio.iot_dht)
         iot_ir_state = GPIO.input(set_gpio.iot_ir)
 
         if iot_ir_state == 0:
             add_number()
-            bulb_status = 1
-            bulb_current_status = bulb_status
+            self.bulb_status.update_status(1)
             tc.iot_bulb_start_time()
 
             db.iotIrInsert(IoTSpace.num, set_information.ir1, timestamp, set_information.detect)
@@ -38,14 +46,14 @@ class IoTSpace:
 
         elif iot_ir_state == 1:
             add_number()
-            bulb_status = 0
-            if bulb_status != bulb_current_status:
+            self.bulb_status.update_status(0)
+            if self.bulb_status.get_current_status() != 0:
                 add_number()
                 tc.iot_bulb_stop_time()
                 bulb_runtime = tc.iot_bulb_runtime()
                 print(bulb_runtime)
                 db.iotBulbInsert(IoTSpace.num, set_information.bulb1, bulb_runtime)
-                bulb_current_status = 0
+                self.bulb_status.update_status(0)
 
             db.iotIrInsert(IoTSpace.num, set_information.ir1, timestamp, set_information.non_detect)
             print(timestamp, "-- Signal not detected!")
@@ -55,8 +63,7 @@ class IoTSpace:
 
         if temperature > 30.0:
             add_number()
-            fan_status = 1
-            fan_current_status = fan_status
+            self.fan_status.update_status(1)
             tc.iot_fan_start_time()
 
             db.iotDhtInsert(IoTSpace.num, set_information.dht1, timestamp, temperature, humidity)
@@ -65,13 +72,13 @@ class IoTSpace:
 
         elif temperature <= 30.0:
             add_number()
-            fan_status = 0
-            if fan_status != fan_current_status:
+            self.fan_status.update_status(0)
+            if self.fan_status.get_current_status() != 0:
                 add_number()
                 tc.iot_fan_stop_time()
                 fan_runtime = tc.iot_fan_runtime()
                 db.iotFanInsert(IoTSpace.num, set_information.fan1, fan_runtime)
-                fan_current_status = 0
+                self.fan_status.update_status(0)
 
             db.iotDhtInsert(IoTSpace.num, set_information.dht1, timestamp, temperature, humidity)
             print("온도가 낮으므로 쿨링팬이 작동하지 않습니다.")
