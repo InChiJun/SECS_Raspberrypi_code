@@ -24,7 +24,7 @@ class DeviceStatus:
     def get_current_status(self):
         return self.current_status
 
-class IoTSpace(DeviceStatus):
+class IoTSpace:
     num = 1
 
     def __init__(self):

@@ -9,8 +9,8 @@ db = Database()
 tc = TimeCalculator()
 
 def add_number():
-    AIotSpace.num += 1
-    return AIotSpace.num
+    AIoTSpace.num += 1
+    return AIoTSpace.num
 
 # 팬과 전구의 상태
 class DeviceStatus:
@@ -24,7 +24,7 @@ class DeviceStatus:
     def get_current_status(self):
         return self.current_status
 
-class AIotSpace:
+class AIoTSpace:
     num = 1
 
     def __init__(self):
@@ -44,7 +44,7 @@ class AIotSpace:
             self.bulb_status.update_status(1)       # 전구의 현재 상태를 1(켜짐)로 바꾼다
             print(timestamp, "-- Signal detected!")
 
-            db.aiotIrInsert(AIotSpace.num, set_information.ir2, timestamp, set_information.detect)
+            db.aiotIrInsert(AIoTSpace.num, set_information.ir2, timestamp, set_information.detect)
             GPIO.output(set_gpio.aiot_ir_bulb, GPIO.LOW)        # 전구를 작동시킨다
 
         elif aiot_ir_state == 1:        # IR 센서에 물체가 감지되지 않았을 때
@@ -53,14 +53,14 @@ class AIotSpace:
                 tc.aiot_bulb_stop_time()        # 전구가 꺼진 시간을 받아온다
                 bulb_runtime = tc.aiot_bulb_runtime()       # 전구가 작동한 시간을 받아온다
                 print(bulb_runtime)
-                db.aiotBulbInsert(AIotSpace.num, set_information.bulb2, bulb_runtime)
+                db.aiotBulbInsert(AIoTSpace.num, set_information.bulb2, bulb_runtime)
                 self.bulb_status.update_status(0)       # 전구의 상태를 다시 0(꺼짐)으로 바꾼다
 
             add_number()
             self.bulb_status.update_status(0)       # 전구의 현재 상태를 0(꺼짐)으로 설정한다
             print(timestamp, "-- Signal not detected!")
 
-            db.aiotIrInsert(AIotSpace.num, set_information.ir2, timestamp, set_information.detect)
+            db.aiotIrInsert(AIoTSpace.num, set_information.ir2, timestamp, set_information.detect)
             GPIO.output(set_gpio.aiot_ir_bulb, GPIO.HIGH)
 
         print("Temp2={0:0.1f}*C Humidity2={1:0.1f}%".format(temperature, humidity))
@@ -73,7 +73,7 @@ class AIotSpace:
             self.fan_status.update_status(1)
             print("온도가 높으므로 쿨링팬을 작동합니다.")
 
-            db.aiotDhtInsert(AIotSpace.num, set_information.dht2, timestamp, temperature, humidity)
+            db.aiotDhtInsert(AIoTSpace.num, set_information.dht2, timestamp, temperature, humidity)
             GPIO.output(set_gpio.aiot_dht_fan, GPIO.LOW)
 
         elif temperature <= 30.0:
@@ -81,12 +81,12 @@ class AIotSpace:
                 add_number()
                 tc.aiot_fan_stop_time()
                 fan_runtime = tc.aiot_fan_runtime()
-                db.aiotFanInsert(AIotSpace.num, set_information.fan2, fan_runtime)
+                db.aiotFanInsert(AIoTSpace.num, set_information.fan2, fan_runtime)
                 self.fan_status.update_status(0)
 
             add_number()
             self.fan_status.update_status(0)
             print("온도가 낮으므로 쿨링팬이 작동하지 않습니다.")
 
-            db.aiotDhtInsert(AIotSpace.num, set_information.dht2, timestamp, temperature, humidity)
+            db.aiotDhtInsert(AIoTSpace.num, set_information.dht2, timestamp, temperature, humidity)
             GPIO.output(set_gpio.aiot_dht_fan, GPIO.HIGH)
