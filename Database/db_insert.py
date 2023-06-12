@@ -37,6 +37,11 @@ class Database:
         self.cursor.execute(sql, (id, name, runtime))
         self.db.commit()
 
+    def iotConInsert(self, id, consumption, daily, month):
+        sql = set_information.iot_con_sql
+        self.cursor.execute(sql, (id, consumption, daily, month))
+        self.db.commit()
+
     # aiot_space 온습도 센서의 상태 Insert
     def aiotDhtInsert(self, id, name, timestamp, temperature, humidity):
         sql = set_information.aiot_dht_sql
@@ -59,4 +64,9 @@ class Database:
     def aiotBulbInsert(self, id, name, runtime):
         sql = set_information.aiot_bulb_sql
         self.cursor.execute(sql, (id, name, runtime))
+        self.db.commit()
+
+    def aiotConInsert(self, id, consumption, daily, month):
+        sql = set_information.aiot_con_sql
+        self.cursor.execute(sql, (id, consumption, daily, month))
         self.db.commit()

@@ -56,6 +56,11 @@ class AIoTSpace:
                 db.aiotBulbInsert(AIoTSpace.num, set_information.bulb2, bulb_runtime)
                 self.bulb_status.update_status(0)       # 전구의 상태를 다시 0(꺼짐)으로 바꾼다
 
+                bulb_consumption = bulb_runtime * 0.00694
+                today = Time.today_day(self)
+                month = Time.today_month(self)
+                db.aiotConInsert(AIoTSpace.num, bulb_consumption, today, month)
+
             add_number()
             self.bulb_status.update_status(0)       # 전구의 현재 상태를 0(꺼짐)으로 설정한다
             print(timestamp, "-- Signal not detected!")
@@ -83,6 +88,11 @@ class AIoTSpace:
                 fan_runtime = tc.set_aiot_fan_runtime()
                 db.aiotFanInsert(AIoTSpace.num, set_information.fan2, fan_runtime)
                 self.fan_status.update_status(0)
+
+                fan_consumption = fan_runtime * 0.72
+                today = Time.today_day(self)
+                month = Time.today_month(self)
+                db.aiotConInsert(AIoTSpace.num, fan_consumption, today, month)
 
             add_number()
             self.fan_status.update_status(0)

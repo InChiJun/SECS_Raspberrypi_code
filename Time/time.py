@@ -1,9 +1,19 @@
-from datetime import datetime
+from datetime import date, datetime
 
 class Time:
     def nowtime(self):
         now = datetime.now().strftime('%Y:%m:%d %H:%M:%S')
         return now
+
+    def today_day(self):
+        today = date.today()
+        day = today.day
+        return day
+
+    def today_month(self):
+        today = date.today()
+        month = today.month
+        return month
 
 class TimeCalculator:
     def __init__(self):
