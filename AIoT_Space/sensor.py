@@ -51,7 +51,7 @@ class AIoTSpace:
             if self.bulb_status.get_current_status() != 0:      # 전구가 켜져있다가 꺼졌을 때(전구 상태가 1이었을 때)
                 add_number()
                 tc.aiot_bulb_stop_time()        # 전구가 꺼진 시간을 받아온다
-                bulb_runtime = tc.aiot_bulb_runtime()       # 전구가 작동한 시간을 받아온다
+                bulb_runtime = tc.set_aiot_bulb_runtime()       # 전구가 작동한 시간을 받아온다
                 print(bulb_runtime)
                 db.aiotBulbInsert(AIoTSpace.num, set_information.bulb2, bulb_runtime)
                 self.bulb_status.update_status(0)       # 전구의 상태를 다시 0(꺼짐)으로 바꾼다
@@ -80,7 +80,7 @@ class AIoTSpace:
             if self.fan_status.get_current_status() != 0:
                 add_number()
                 tc.aiot_fan_stop_time()
-                fan_runtime = tc.aiot_fan_runtime()
+                fan_runtime = tc.set_aiot_fan_runtime()
                 db.aiotFanInsert(AIoTSpace.num, set_information.fan2, fan_runtime)
                 self.fan_status.update_status(0)
 
