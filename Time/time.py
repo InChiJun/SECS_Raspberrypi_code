@@ -7,17 +7,17 @@ class Time:
 
 class TimeCalculator:
     def __init__(self):
-        self.iot_bulb_start_time = None
-        self.iot_bulb_stop_time = None
+        self.iot_bulb_start_time = ""
+        self.iot_bulb_stop_time = ""
 
-        self.iot_fan_start_time = None
-        self.iot_fan_stop_time = None
+        self.iot_fan_start_time = ""
+        self.iot_fan_stop_time = ""
 
-        self.aiot_bulb_start_time = None
-        self.aiot_bulb_stop_time = None
+        self.aiot_bulb_start_time = ""
+        self.aiot_bulb_stop_time = ""
 
-        self.aiot_fan_start_time = None
-        self.aiot_fan_stop_time = None
+        self.aiot_fan_start_time = ""
+        self.aiot_fan_stop_time = ""
 
     def iot_bulb_start_time(self):
         self.iot_bulb_start_time = datetime.now()
