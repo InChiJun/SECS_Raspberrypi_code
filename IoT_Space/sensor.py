@@ -38,7 +38,7 @@ class IoTSpace:
 
         if iot_ir_state == 0:       # IR 센서에 물체가 감지되었을 때
             if self.bulb_status.get_current_status() != 1:      # 전구가 꺼져있는 상태일 때(전구 상태가 0이었을 때)
-                tc.iot_bulb_start_time()        # 전구가 켜진 시간을 받아온다
+                tc.set_iot_bulb_start_time()        # 전구가 켜진 시간을 받아온다
 
             add_number()
             self.bulb_status.update_status(1)       # 전구의 현재 상태를 1(켜짐)로 바꾼다
@@ -50,7 +50,7 @@ class IoTSpace:
         elif iot_ir_state == 1:     # IR 센서에 물체가 감지되지 않았을 때
             if self.bulb_status.get_current_status() != 0:      # 전구가 켜져있다가 꺼졌을 때(전구 상태가 1이었을 때)
                 add_number()
-                tc.iot_bulb_stop_time()     # 전구가 꺼진 시간을 받아온다
+                tc.set_iot_bulb_stop_time()     # 전구가 꺼진 시간을 받아온다
                 bulb_runtime = tc.set_iot_bulb_runtime()        # 전구가 작동한 시간을 받아온다
                 print(bulb_runtime)
                 db.iotBulbInsert(IoTSpace.num, set_information.bulb1, bulb_runtime)
@@ -67,7 +67,7 @@ class IoTSpace:
 
         if temperature > 30.0:
             if self.fan_status.get_current_status() != 1:
-                tc.iot_fan_start_time()
+                tc.set_iot_fan_start_time()
 
             add_number()
             self.fan_status.update_status(1)
@@ -79,7 +79,7 @@ class IoTSpace:
         elif temperature <= 30.0:
             if self.fan_status.get_current_status() != 0:
                 add_number()
-                tc.iot_fan_stop_time()
+                tc.set_iot_fan_stop_time()
                 fan_runtime = tc.set_iot_fan_runtime()
                 db.iotFanInsert(IoTSpace.num, set_information.fan1, fan_runtime)
                 self.fan_status.update_status(0)
