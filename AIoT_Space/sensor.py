@@ -35,9 +35,9 @@ class AIoTSpace:
 
         def get_aiot_ir_state():
             if aiot_ir_state == 0:
-                return '물체가 감지됨'
+                return 'O'
             else:
-                return '감지되지 않음'
+                return 'X'
 
         payload = {
             'temperature': temperature,
