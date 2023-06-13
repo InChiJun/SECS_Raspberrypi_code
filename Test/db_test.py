@@ -1,7 +1,7 @@
 from random import *
 import time
 import pymysql
-import my_db
+from Database import my_db
 
 count = 0
 sensor_value = 0
@@ -17,7 +17,7 @@ while(1):
         curr = conn.cursor()
         res = sensor_value/5
         
-        sql = "insert into value1 values(' "+str(index)+" ', '"+my_db.host+"',' "+str(res)+" ')"
+        sql = "insert into value1 values(' " + str(index) +" ', '" + my_db.host + "',' " + str(res) + " ')"
         print(sql)
         print(curr.execute(sql))
         conn.commit()

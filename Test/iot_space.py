@@ -1,5 +1,3 @@
-import json
-import requests
 import RPi.GPIO as GPIO
 import Adafruit_DHT as dht
 
@@ -9,18 +7,6 @@ from Database.db_insert import Database
 
 db = Database()
 tc = TimeCalculator()
-
-def add_number():
-    IoTSpace.num += 1
-    return IoTSpace.num
-
-def get_temp():
-    humidity, temperature = dht.read_retry(dht.DHT22, set_gpio.iot_dht)  # 온습도 정보를 읽어온다
-    return temperature
-
-def get_iot_ir_state():
-    iot_ir_state = GPIO.input(set_gpio.iot_ir)  # IR 센서의 감지 정보를 읽어온다
-    return iot_ir_state
 
 # 팬과 전구의 상태
 class DeviceStatus:
@@ -35,16 +21,6 @@ class DeviceStatus:
         return self.current_status
 
 class IoTSpace:
-    num = 1
-
-    payload = {
-        'temperature': get_temp(),
-        'iot_ir_state': get_iot_ir_state()
-    }
-
-    url = '127.0.0.1:8000/SECS/iot_space/'
-    headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
-    response = requests.post(url, data=json.dumps(payload), headers=headers)
 
     def __init__(self):
         self.fan_status = DeviceStatus(0)
@@ -62,46 +38,51 @@ class IoTSpace:
             self.bulb_status.update_status(1)       # 전구의 현재 상태를 1(켜짐)로 바꾼다
             print(timestamp, "-- Signal detected!")
 
+            db.iotIrInsert(set_information.ir1, timestamp, set_information.detect)
             GPIO.output(set_gpio.iot_ir_bulb, GPIO.LOW)      # 전구를 작동시킨다
-            return IoTSpace.response
 
         elif iot_ir_state == 1:     # IR 센서에 물체가 감지되지 않았을 때
             if self.bulb_status.get_current_status() != 0:      # 전구가 켜져있다가 꺼졌을 때(전구 상태가 1이었을 때)
-                add_number()
+
                 tc.set_iot_bulb_stop_time()     # 전구가 꺼진 시간을 받아온다
                 bulb_runtime = tc.set_iot_bulb_runtime()        # 전구가 작동한 시간을 받아온다
-                print(bulb_runtime)
-                db.iotBulbInsert(IoTSpace.num, set_information.bulb1, bulb_runtime)
+                bulb_consumption = bulb_runtime * 0.00694  # 전구의 초당 전력소비량을 추출한다
+                today = Time.today_day(self)    # 오늘 날짜의  일을 받아온다
+                month = Time.today_month(self)  # 오늘 날짜의 월을 받아온다
+                db.iotBulbInsert(set_information.bulb1, bulb_runtime, bulb_consumption, today, month)
                 self.bulb_status.update_status(0)       # 전구의 상태를 다시 0(꺼짐)으로 바꾼다
 
             self.bulb_status.update_status(0)  # 전구의 현재 상태를 0(꺼짐)으로 설정한다
             print(timestamp, "-- Signal not detected!")
 
+            db.iotIrInsert(set_information.ir1, timestamp, set_information.non_detect)
             GPIO.output(set_gpio.iot_ir_bulb, GPIO.HIGH)
-            return IoTSpace.response
 
-        print("Temp1={0:0.1f}*C Humidity1={1:0.1f}%".format(temperature, humidity))
+        print("IoT_Temperature={0:0.1f}*C IoT_Humidity={1:0.1f}%".format(temperature, humidity))
 
-        if temperature > 30.0:
+        if temperature > 21.0:
             if self.fan_status.get_current_status() != 1:
                 tc.set_iot_fan_start_time()
 
             self.fan_status.update_status(1)
             print("온도가 높으므로 쿨링팬을 작동합니다.")
 
+            db.iotDhtInsert(set_information.dht1, timestamp, temperature, humidity)
             GPIO.output(set_gpio.iot_dht_fan, GPIO.LOW)
-            return IoTSpace.response
 
-        elif temperature <= 30.0:
+        elif temperature <= 21.0:
             if self.fan_status.get_current_status() != 0:
-                add_number()
+
                 tc.set_iot_fan_stop_time()
                 fan_runtime = tc.set_iot_fan_runtime()
-                db.iotFanInsert(IoTSpace.num, set_information.fan1, fan_runtime)
+                fan_consumption = fan_runtime * 0.72
+                today = Time.today_day(self)
+                month = Time.today_month(self)
+                db.iotFanInsert(set_information.fan1, fan_runtime, fan_consumption, today, month)
                 self.fan_status.update_status(0)
 
             self.fan_status.update_status(0)
             print("온도가 낮으므로 쿨링팬이 작동하지 않습니다.")
 
+            db.iotDhtInsert(set_information.dht1, timestamp, temperature, humidity)
             GPIO.output(set_gpio.iot_dht_fan, GPIO.HIGH)
-            return IoTSpace.response
