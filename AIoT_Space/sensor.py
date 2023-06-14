@@ -41,10 +41,10 @@ class AIoTSpace:
 
         payload = {
             'temperature': temperature,
-            'ior_ir_state': get_aiot_ir_state()
+            'aiot_ir_state': get_aiot_ir_state()
         }
 
-        url = 'http://127.0.0.1:8000/aiotspace/'
+        url = 'http://192.210.247.224:8000/aiotspace/'
         headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
         response = requests.post(url, data=json.dumps(payload), headers=headers)
 

@@ -41,12 +41,12 @@ class IoTSpace:
 
         payload = {
             'temperature': temperature,
-            'ior_ir_state': get_iot_ir_state()
+            'iot_ir_state': get_iot_ir_state()
         }
 
-        url = 'http://127.0.0.1:8000/iotspace/'
+        url = 'http://192.210.247.224:8000/iotspace/'
         headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
-        response = requests.post(url, data=json.dumps(payload), headers=headers)
+        response = requests.post(url, data=json.dumps(payload), headers=headers, verify=False)
 
         if iot_ir_state == 0:       # IR 센서에 물체가 감지되었을 때
             if self.bulb_status.get_current_status() != 1:      # 전구가 꺼져있는 상태일 때(전구 상태가 0이었을 때)
