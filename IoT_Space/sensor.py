@@ -40,7 +40,7 @@ class IoTSpace:
                 return 'X'
 
         payload = {
-            'temperature': temperature,
+            'iot_temperature': temperature,
             'iot_ir_state': get_iot_ir_state()
         }
 

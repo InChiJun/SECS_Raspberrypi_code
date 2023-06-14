@@ -40,7 +40,7 @@ class AIoTSpace:
                 return 'X'
 
         payload = {
-            'temperature': temperature,
+            'aiot_temperature': temperature,
             'aiot_ir_state': get_aiot_ir_state()
         }
 
