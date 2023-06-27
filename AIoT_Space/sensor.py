@@ -56,7 +56,6 @@ class AIoTSpace:
             print(timestamp, "-- 물체가 감지됨(AIoT Space)")
 
             GPIO.output(set_gpio.aiot_ir_bulb, GPIO.LOW)        # 전구를 작동시킨다
-            return response
 
         elif aiot_ir_state == 1:        # IR 센서에 물체가 감지되지 않았을 때
             if self.bulb_status.get_current_status() != 0:      # 전구가 켜져있다가 꺼졌을 때(전구 상태가 1이었을 때)
@@ -66,14 +65,13 @@ class AIoTSpace:
                 bulb_consumption = bulb_runtime * 0.00694  # 전구의 초당 전력소비량을 추출한다
                 today = Time.today_day(self)  # 오늘 날짜의  일을 받아온다
                 month = Time.today_month(self)  # 오늘 날짜의 월을 받아온다
-                db.aiotBulbInsert(set_information.bulb2, bulb_runtime, bulb_consumption, today, month)
+                db.aiotBulbInsert(set_information.bulb2, timestamp, bulb_runtime, bulb_consumption, today, month)
                 self.bulb_status.update_status(0)       # 전구의 상태를 다시 0(꺼짐)으로 바꾼다
 
             self.bulb_status.update_status(0)       # 전구의 현재 상태를 0(꺼짐)으로 설정한다
             print(timestamp, "--감지되지 않음(AIoT Space)")
 
             GPIO.output(set_gpio.aiot_ir_bulb, GPIO.HIGH)
-            return response
 
         print("Temperature={0:0.1f}*C / Humidity={1:0.1f}% (AIoT Space)".format(temperature, humidity))
 
@@ -85,7 +83,6 @@ class AIoTSpace:
             print("온도가 높으므로 쿨링팬을 작동합니다.")
 
             GPIO.output(set_gpio.aiot_dht_fan, GPIO.LOW)
-            return response
 
         elif temperature <= 21.0:
             if self.fan_status.get_current_status() != 0:
@@ -95,11 +92,12 @@ class AIoTSpace:
                 fan_consumption = fan_runtime * 0.72
                 today = Time.today_day(self)
                 month = Time.today_month(self)
-                db.iotFanInsert(set_information.fan1, fan_runtime, fan_consumption, today, month)
+                db.iotFanInsert(set_information.fan1, timestamp, fan_runtime, fan_consumption, today, month)
                 self.fan_status.update_status(0)
 
             self.fan_status.update_status(0)
             print("온도가 낮으므로 쿨링팬이 작동하지 않습니다.")
 
             GPIO.output(set_gpio.aiot_dht_fan, GPIO.HIGH)
-            return response
+
+        return response
