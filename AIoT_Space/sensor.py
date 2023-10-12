@@ -44,7 +44,7 @@ class AIoTSpace:
             'aiot_ir_state': get_aiot_ir_state()
         }
 
-        url = 'http://192.210.247.224:8000/aiotspace/'
+        url = 'http://192.168.0.25:8000/aiotspace/'
         headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
         response = requests.post(url, data=json.dumps(payload), headers=headers)
 

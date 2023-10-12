@@ -18,7 +18,7 @@ class Controller:
             try:
                 self.iot_space.run()
                 self.aiot_space.run()
-                time.sleep(3)
+                time.sleep(10)
 
             except RuntimeError as e:
                 print("Reading from Sensor failure: ", e.args)

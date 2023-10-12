@@ -43,7 +43,7 @@ class IoTSpace:
             'iot_ir_state': get_iot_ir_state()
         }
 
-        url = 'http://192.210.247.224:8000/iotspace/'
+        url = 'http://192.168.0.25:8000/iotspace/'
         response = requests.get(url, params=payload, allow_redirects=True)
         # response = requests.post(url, data=json.dumps(payload), headers=headers, verify=False)
 
